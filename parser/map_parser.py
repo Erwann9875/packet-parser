@@ -79,6 +79,7 @@ class MapParser:
     def __init__(self):
         self._file_map_id_dat = os.path.join(os.path.sep, "MapIDData.dat")
         self._folder_map = os.path.join(os.path.sep, "map")
+        self.map_flags = {}
 
     def parse_dat_async(self, folder: str) -> List[MapDto]:
         generic_parser = GenericParser(folder + self._file_map_id_dat, "DATA 0", 0, [])
@@ -92,10 +93,13 @@ class MapParser:
         fc_maps = []
         for file in Path(folder_map).iterdir():
             map_id = int(file.name)
+            music_id = dictionary_music.get(file.name)
+            if music_id is not None and music_id != "0":
+                self.add_map_flag(map_id, "IS_BASE_MAP")
             flags = self.get_flags(map_id)
             map_dto = MapDto(
                 map_id,
-                int(dictionary_music.get(file.name, 0)),
+                int(music_id) if music_id is not None else 0,
                 flags
             )
             # act 4 maps, must be in a separate files
@@ -112,11 +116,11 @@ class MapParser:
             maps_yaml = Converter.dto_to_yaml(fc_maps)
         return maps_yaml
     
-    def add_map_flag(map_id: int, flag: str):
-        if map_id in FLAG_DEFINITIONS:
-            FLAG_DEFINITIONS[map_id].append(flag)
+    def add_map_flag(self, map_id: int, flag: str):
+        if map_id in self.map_flags:
+            self.map_flags[map_id].append(flag)
         else:
-            FLAG_DEFINITIONS[map_id] = [flag]
+            self.map_flags[map_id] = [flag]
 
     def get_flags(self, map_id: int):
         flags = []
@@ -125,4 +129,8 @@ class MapParser:
                 flags.extend(self.FLAG_DEFINITIONS[key])
             elif key == map_id:
                 flags.extend(self.FLAG_DEFINITIONS[key])
+        
+        if map_id in self.map_flags:
+            flags.extend(self.map_flags[map_id])
+        
         return flags
