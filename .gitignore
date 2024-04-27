@@ -73,3 +73,5 @@ logs/
 
 # Ignore environment file
 .env
+
+output

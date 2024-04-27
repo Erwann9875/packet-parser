@@ -5,6 +5,7 @@ import asyncio
 import logging
 from parser.generic_parser import GenericParser
 from dto.map_dto import MapDto
+from converter import Converter
 
 class MapParser:
     def __init__(self):
@@ -25,8 +26,8 @@ class MapParser:
             map_dto = MapDto(
                 map_id,
                 int(dictionary_music.get(file.name, 0)),
-                file.read_bytes(),
                 map_id == 147
             )
-            print(map_dto)
             maps.append(map_dto)
+        maps_yaml = Converter.dto_to_yaml(maps)
+        return maps_yaml
