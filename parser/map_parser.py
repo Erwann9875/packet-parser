@@ -103,6 +103,8 @@ class MapParser:
                 fc_maps.append(map_dto)
             else:
                 maps.append(map_dto)
+        maps.sort(key=lambda x: x.map_id)
+        fc_maps.sort(key=lambda x: x.map_id)
         maps_yaml = None
         if not fc:
             maps_yaml = Converter.dto_to_yaml(maps)
