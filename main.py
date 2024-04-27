@@ -2,6 +2,7 @@
 
 from packet_processor import PacketProcessor
 from plugin import Plugin
+import asyncio
 import os
 import sys
 
@@ -28,4 +29,4 @@ if __name__ == "__main__":
 
     with open(input_file, 'r') as file:
         lines = file.readlines()
-    processor.process_packet(lines)
+    asyncio.run(processor.process_packet(lines))
