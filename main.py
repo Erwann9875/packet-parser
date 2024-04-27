@@ -18,13 +18,13 @@ for plugin_file in plugin_files:
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python3 main.py <input_file>")
-        sys.exit(1)
+        sys.exit(84)
     
     input_file = sys.argv[1]
     
     if not os.path.exists(input_file):
         print(f"Error: File '{input_file}' not found.")
-        sys.exit(1)
+        sys.exit(84)
 
     with open(input_file, 'r') as file:
         lines = file.readlines()
