@@ -9,6 +9,7 @@ from converter import Converter
 
 class MapParser:
     FLAG_DEFINITIONS = {
+        1: ["ACT_1", "HAS_USER_SHOPS_DISABLED", "NOSVILLE", "HAS_SEALED_VESSELS_DISABLED", "HAS_SIGNPOSTS_ENABLED"],
         130: ["ACT_4", "ANGEL_SIDE", "HAS_DROP_DIRECTLY_IN_INVENTORY_ENABLED", "HAS_SEALED_VESSELS_DISABLED"],
         131: ["ACT_4", "DEMON_SIDE", "HAS_DROP_DIRECTLY_IN_INVENTORY_ENABLED", "HAS_SEALED_VESSELS_DISABLED"],
         132: ["ACT_4", "ANGEL_SIDE", "HAS_PVP_FACTION_ENABLED", "HAS_DROP_DIRECTLY_IN_INVENTORY_ENABLED", "HAS_IMMUNITY_ON_MAP_CHANGE_ENABLED", "HAS_SEALED_VESSELS_DISABLED"],
@@ -17,7 +18,8 @@ class MapParser:
         151: ["ACT_4", "ANGEL_SIDE", "HAS_PVP_FACTION_ENABLED", "HAS_DROP_DIRECTLY_IN_INVENTORY_ENABLED", "HAS_IMMUNITY_ON_MAP_CHANGE_ENABLED", "HAS_SEALED_VESSELS_DISABLED"],
         152: ["ACT_4", "DEMON_SIDE", "HAS_PVP_FACTION_ENABLED", "HAS_DROP_DIRECTLY_IN_INVENTORY_ENABLED", "HAS_IMMUNITY_ON_MAP_CHANGE_ENABLED", "HAS_SEALED_VESSELS_DISABLED"],
         153: ["ACT_4", "HAS_PVP_FACTION_ENABLED", "HAS_DROP_DIRECTLY_IN_INVENTORY_ENABLED", "HAS_IMMUNITY_ON_MAP_CHANGE_ENABLED", "HAS_SEALED_VESSELS_DISABLED", "HAS_PVE_REPUTATION_ENABLED"],
-        154: ["ACT_4", "HAS_PVP_FACTION_ENABLED", "HAS_DROP_DIRECTLY_IN_INVENTORY_ENABLED"]
+        154: ["ACT_4", "HAS_PVP_FACTION_ENABLED", "HAS_DROP_DIRECTLY_IN_INVENTORY_ENABLED"],
+        (2, 17): ["ACT_1"]
     }
 
     def __init__(self):
@@ -61,5 +63,11 @@ class MapParser:
         else:
             FLAG_DEFINITIONS[map_id] = [flag]
 
-    def get_flags(self, map_id):
-        return self.FLAG_DEFINITIONS.get(map_id, [])
+    def get_flags(self, map_id: int):
+        flags = []
+        for key in self.FLAG_DEFINITIONS:
+            if isinstance(key, tuple) and len(key) == 2 and key[0] <= map_id <= key[1]:
+                flags.extend(self.FLAG_DEFINITIONS[key])
+            elif key == map_id:
+                flags.extend(self.FLAG_DEFINITIONS[key])
+        return flags
