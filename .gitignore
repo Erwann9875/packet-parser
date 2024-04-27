@@ -1,0 +1,75 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.bak
+
+# macOS
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Ignore pipenv
+Pipfile.lock
+
+# Ignore PyCharm project files
+.idea/
+*.iml
+
+# Ignore VS Code workspace settings
+.vscode/settings.json
+
+# Ignore any local configuration files
+*.local
+
+# Ignore coverage report
+coverage/
+
+# Ignore logs and temp files
+logs/
+*.log
+*.tmp
+
+# Ignore database files
+*.db
+
+# Ignore compiled Python files
+*.pyc
+
+# Ignore environment file
+.env
