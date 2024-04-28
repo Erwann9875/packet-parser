@@ -17,7 +17,7 @@ class NpcPlugin(Plugin):
         npc_parser = NpcParser()
         npc_groups = npc_parser.insert_npcs(packet_list)
 
-        output_npcs_dir = "./output/npc_data/map_npc_placement"
+        output_npcs_dir = "./output/map_npc_placement"
         if os.path.exists(output_npcs_dir):
             shutil.rmtree(output_npcs_dir)
         os.makedirs(output_npcs_dir)
