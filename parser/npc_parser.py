@@ -5,6 +5,7 @@ class NpcParser:
     def insert_npcs(self, packet_list: List[List[str]]):
         map_id = 0
         npcs = []
+        shop_packets = [packet for packet in packet_list if len(packet) > 6 and packet[0] == "shop" and packet[1] == "2"]
 
         for current_packet in packet_list:
             if current_packet[0] == "at" and len(current_packet) > 5:
@@ -23,6 +24,21 @@ class NpcParser:
                               pos_x=pos_x, pos_y=pos_y, dialog_id=dialog_id, 
                               can_move=can_move, direction_facing=direction_facing)
                 npcs.append(npc)
+        
+        for shop_packet in shop_packets:
+            map_npc_id = int(shop_packet[2])
+            shop_name = " ".join(shop_packet[6:])
+            menu_type = int(shop_packet[4])
+            shop_type = int(shop_packet[5])
+
+            for npc in npcs:
+                if npc.map_npc_id == map_npc_id:
+                    npc.item_shop = {
+                        "name": shop_name,
+                        "menu_type": menu_type,
+                        "shop_type": shop_type
+                    }
+                    break
 
         return self.group_npcs_by_map_id(npcs)
 
@@ -38,6 +54,7 @@ class NpcParser:
                 "pos_y": npc.pos_y,
                 "dialog_id": npc.dialog_id,
                 "can_move": npc.can_move,
-                "direction_facing": npc.direction_facing
+                "direction_facing": npc.direction_facing,
+                "item_shop": npc.item_shop
             })
         return npcs_map

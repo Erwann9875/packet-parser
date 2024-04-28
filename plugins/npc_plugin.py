@@ -12,7 +12,7 @@ class NpcPlugin(Plugin):
 
     async def process(self, cleaned_lines):
         cleaned_lines_filtered = [line for line in cleaned_lines if line]
-        packet_list = [line for line in cleaned_lines_filtered if line[0] in ("in", "mv", "at")]
+        packet_list = [line for line in cleaned_lines_filtered if line[0] in ("in", "mv", "at", "shop")]
 
         npc_parser = NpcParser()
         npc_groups = npc_parser.insert_npcs(packet_list)
@@ -44,9 +44,11 @@ class NpcPlugin(Plugin):
                 }
                 if npc.direction_facing is not None:
                     npc_info["direction_facing"] = npc.direction_facing
+                if npc.item_shop is not None:
+                    npc_info["item_shop"] = npc.item_shop
                 npcs_info.append(npc_info)
 
-            yaml_data = yaml.dump({"map_id": map_id, "npcs": npcs_info}, default_flow_style=False, sort_keys=False)
+            yaml_data = yaml.dump({"map_id": map_id, "npcs": npcs_info}, default_flow_style=False, sort_keys=False, allow_unicode=True)
             with open(os.path.join(output_dir, f"map_{map_id}_npc.yaml"), "w") as yaml_file:
                 yaml_file.write(yaml_data)
 
