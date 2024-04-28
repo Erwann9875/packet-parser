@@ -47,6 +47,18 @@ class NpcParser:
                         npc.item_shop["menu_type"] = menu_type
                         npc.item_shop["shop_type"] = shop_type
                     break
+                    if npc.skill_shop is None:
+                        npc.skill_shop = {
+                            "name": shop_name,
+                            "menu_type": menu_type,
+                            "shop_type": shop_type,
+                            "tabs": []
+                        }
+                    else:
+                        npc.skill_shop["name"] = shop_name
+                        npc.skill_shop["menu_type"] = menu_type
+                        npc.skill_shop["shop_type"] = shop_type
+                    break
         
         for shop_item_packet in shop_item_packets:
             shop_tab_id = 0
@@ -64,9 +76,19 @@ class NpcParser:
 
                 items_data = shop_item_packet[5:]
                 for item_data in items_data:
+                    if "." not in item_data:
+                        item_vnum = int(item_data)
+                        for npc in npcs:
+                            if npc.map_npc_id in tab_dict:
+                                npc.item_shop = None
+                        tab["items"].append({"skill_vnum": item_vnum})
+                        continue
                     item_info = item_data.split(".")
                     if len(item_info) >= 4:
                         item_vnum = int(item_info[2])
+                        for npc in npcs:
+                            if npc.map_npc_id in tab_dict:
+                                npc.skill_shop = None
                         tab["items"].append({"item_vnum": item_vnum})
                 
                 map_npc_id = int(shop_item_packet[2])
@@ -79,6 +101,8 @@ class NpcParser:
                 if npc.map_npc_id in tab_dict:
                     if npc.item_shop is not None:
                         npc.item_shop["tabs"] = tab_dict[npc.map_npc_id]
+                    if npc.skill_shop is not None:
+                        npc.skill_shop["tabs"] = tab_dict[npc.map_npc_id]
 
         return self.group_npcs_by_map_id(npcs)
 
