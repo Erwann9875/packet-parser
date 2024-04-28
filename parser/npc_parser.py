@@ -4,9 +4,11 @@ from dto.npc_dto import NpcDto
 class NpcParser:
     def insert_npcs(self, packet_list: List[List[str]]):
         map_id = 0
+        quest_dialog_id = 0
         npcs = []
         shop_packets = [packet for packet in packet_list if len(packet) > 6 and packet[0] == "shop" and packet[1] == "2"]
         shop_item_packets = [packet for packet in packet_list if packet[0] == "shopping" or packet[0] == "n_inv"]
+        npc_req_dict = {int(packet[2]): int(packet[3]) for packet in packet_list if packet[0] == "npc_req" and len(packet) > 3}
         tab_dict = {}
 
         for current_packet in packet_list:
@@ -21,10 +23,11 @@ class NpcParser:
                 dialog_id = int(current_packet[9])
                 can_move = current_packet[13] != "1"
                 direction_facing = int(current_packet[6]) if len(current_packet) > 13 else None
+                set_dialog = npc_req_dict.get(map_npc_id, None) if quest_dialog_id != dialog_id else None
 
                 npc = NpcDto(map_id=map_id, map_npc_id=map_npc_id, vnum=vnum, 
                               pos_x=pos_x, pos_y=pos_y, dialog_id=dialog_id, 
-                              can_move=can_move, direction_facing=direction_facing)
+                              can_move=can_move, quest_dialog_id=set_dialog, direction_facing=direction_facing)
                 npcs.append(npc)
         
         for shop_packet in shop_packets:
@@ -118,6 +121,7 @@ class NpcParser:
                 "pos_y": npc.pos_y,
                 "dialog_id": npc.dialog_id,
                 "can_move": npc.can_move,
+                "quest_dialog_id": npc.quest_dialog_id,
                 "direction_facing": npc.direction_facing,
                 "item_shop": npc.item_shop
             })
