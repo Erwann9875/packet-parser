@@ -17,7 +17,6 @@ class MonsterParser:
                 map_x = int(current_packet[4])
                 map_y = int(current_packet[5])
                 direction = int(current_packet[6]) if current_packet[6] else 0
-                is_disabled = False
                 is_moving = map_monster_id in mob_mv_packets_list
 
                 monster = MonsterDto(map_id, map_monster_id, monster_id, map_x, map_y, is_moving)
