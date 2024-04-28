@@ -17,7 +17,7 @@ class MonsterPlugin(Plugin):
         monster_parser = MonsterParser()
         monster_groups = monster_parser.insert_monsters(packet_list)
 
-        output_monsters_dir = "./output/monster_data"
+        output_monsters_dir = "./output/map_monster_placement"
         if os.path.exists(output_monsters_dir):
             shutil.rmtree(output_monsters_dir)
         os.makedirs(output_monsters_dir)
