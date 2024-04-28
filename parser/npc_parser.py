@@ -6,6 +6,8 @@ class NpcParser:
         map_id = 0
         npcs = []
         shop_packets = [packet for packet in packet_list if len(packet) > 6 and packet[0] == "shop" and packet[1] == "2"]
+        shop_item_packets = [packet for packet in packet_list if packet[0] == "shopping" or packet[0] == "n_inv"]
+        tab_dict = {}
 
         for current_packet in packet_list:
             if current_packet[0] == "at" and len(current_packet) > 5:
@@ -33,12 +35,50 @@ class NpcParser:
 
             for npc in npcs:
                 if npc.map_npc_id == map_npc_id:
-                    npc.item_shop = {
-                        "name": shop_name,
-                        "menu_type": menu_type,
-                        "shop_type": shop_type
-                    }
+                    if npc.item_shop is None:
+                        npc.item_shop = {
+                            "name": shop_name,
+                            "menu_type": menu_type,
+                            "shop_type": shop_type,
+                            "tabs": []
+                        }
+                    else:
+                        npc.item_shop["name"] = shop_name
+                        npc.item_shop["menu_type"] = menu_type
+                        npc.item_shop["shop_type"] = shop_type
                     break
+        
+        for shop_item_packet in shop_item_packets:
+            shop_tab_id = 0
+            map_npc_id = 0
+
+            if shop_item_packet[0] == "shopping":
+                shop_tab_id = int(shop_item_packet[1])
+                map_npc_id = int(shop_item_packet[4])
+            
+            if shop_item_packet[0] == "n_inv":
+                tab = {
+                    "shop_tab_id": shop_tab_id,
+                    "items": []
+                }
+
+                items_data = shop_item_packet[5:]
+                for item_data in items_data:
+                    item_info = item_data.split(".")
+                    if len(item_info) >= 4:
+                        item_vnum = int(item_info[2])
+                        tab["items"].append({"item_vnum": item_vnum})
+                
+                map_npc_id = int(shop_item_packet[2])
+            
+                if map_npc_id not in tab_dict:
+                    tab_dict[map_npc_id] = []
+                tab_dict[map_npc_id].append(tab)
+
+            for npc in npcs:
+                if npc.map_npc_id in tab_dict:
+                    if npc.item_shop is not None:
+                        npc.item_shop["tabs"] = tab_dict[npc.map_npc_id]
 
         return self.group_npcs_by_map_id(npcs)
 
