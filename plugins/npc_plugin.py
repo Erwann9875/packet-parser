@@ -47,7 +47,7 @@ class NpcPlugin(Plugin):
                 if npc.item_shop is not None:
                     npc_info["item_shop"] = npc.item_shop
                 if npc.skill_shop is not None:
-                    npc_info["skill_shop"] = npc.item_shop
+                    npc_info["skill_shop"] = npc.skill_shop
                 npcs_info.append(npc_info)
 
             yaml_data = yaml.dump({"map_id": map_id, "npcs": npcs_info}, default_flow_style=False, sort_keys=False, allow_unicode=True)
