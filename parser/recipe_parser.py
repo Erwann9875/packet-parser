@@ -3,30 +3,34 @@ from dto.recipe_dto import RecipeDto
 
 class RecipeParser:
     def insert_recipes(self, packet_list: List[List[str]]):
+        map_npc_id = 0
+        item_vnum = 0
         recipes = []
-        current_recipe = None
-        item_vnum_to_insert = 0
-        map_npc_id = None
+        producer_item_vnum = 0
 
-        for packet in packet_list:
-            if len(packet) > 2 and packet[0] == "pdtse":
-                item_vnum_to_insert = int(packet[2])
+        for current_packet in packet_list:
+            if len(current_packet) > 2 and current_packet[0] == "pdtse":
+                item_vnum = int(current_packet[2])
+                continue
 
-            elif len(packet) > 4 and packet[0] == "n_run":
-                map_npc_id = int(packet[4])
+            if len(current_packet) > 4 and current_packet[0] == "n_run":
+                map_npc_id = int(current_packet[4])
+                continue
 
-            elif packet[0] == "m_list":
-                if packet[1] == "2":
-                    producer_item_vnum = int(packet[2])
-                    current_recipe = RecipeDto(item_vnum=item_vnum_to_insert, quantity = 1, producer_item_vnum=producer_item_vnum, producer_map_npc_id=map_npc_id, items=[])
-                    recipes.append(current_recipe)
+            if current_packet[0] == "m_list" and current_packet[1] == "3":
+                items = []
+                for i in range(2, len(current_packet), 2):
+                    if int(current_packet[i + 1]) != -1:
+                        vnum = int(current_packet[i + 1])
+                        quantity = int(current_packet[i])
+                        items.append({"item_vnum": vnum, "quantity": quantity})
 
-                elif packet[1] == "3":
-                    for i in range(3, len(packet), 2):
-                        if int(packet[i]) < 0:
-                            continue
-                        item = {"item_vnum": int(packet[i]), "quantity": int(packet[i + 1])}
-                        if current_recipe and not any(item['item_vnum'] == existing['item_vnum'] for existing in current_recipe.items):
-                            current_recipe.items.append(item)
+                recipe = next((r for r in recipes if r.item_vnum == item_vnum), None)
+                if recipe is None:
+                    recipe = RecipeDto(item_vnum=item_vnum, quantity=1, items=items,
+                                       producer_map_npc_id=map_npc_id, producer_item_vnum=producer_item_vnum)
+                    recipes.append(recipe)
+                else:
+                    recipe.items.extend(items)
 
-        return [recipe for recipe in recipes if recipe.items]
+        return recipes

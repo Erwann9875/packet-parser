@@ -38,7 +38,7 @@ class RecipePlugin(Plugin):
                 "item_vnum": dto.item_vnum,
                 "quantity": dto.quantity,
                 "producer_map_npc_id": dto.producer_map_npc_id,
-                #"producer_item_vnum": dto.producer_item_vnum,
+                "producer_item_vnum": dto.producer_item_vnum,
                 "items": dto.items
             }
             yaml_list.append(recipe_dict)
