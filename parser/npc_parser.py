@@ -14,7 +14,7 @@ class NpcParser:
             if current_packet[0] == "at" and len(current_packet) > 5:
                 map_id = int(current_packet[2])
             
-            if current_packet[0] == "in" and current_packet[1] == "2" and int(current_packet[3]) <= 20000:
+            if current_packet[0] == "in" and current_packet[1] == "2" and current_packet[12] == "-1" and int(current_packet[3]) <= 20000:
                 map_npc_id = int(current_packet[3])
                 vnum = int(current_packet[2])
                 pos_x = int(current_packet[4])
