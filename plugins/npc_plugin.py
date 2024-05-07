@@ -39,9 +39,10 @@ class NpcPlugin(Plugin):
                     "vnum": npc.vnum,
                     "pos_x": npc.pos_x,
                     "pos_y": npc.pos_y,
-                    "dialog_id": npc.dialog_id,
-                    "can_move": npc.can_move
+                    "dialog_id": npc.dialog_id
                 }
+                if npc.can_move is not None:
+                    npc_info["can_move"] = npc.can_move
                 if npc.quest_dialog_id is not None:
                     npc_info["quest_dialog_id"] = npc.quest_dialog_id
                 if npc.direction_facing is not None:

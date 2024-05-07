@@ -20,7 +20,7 @@ class NpcParser:
                 pos_x = int(current_packet[4])
                 pos_y = int(current_packet[5])
                 dialog_id = int(current_packet[9])
-                can_move = current_packet[13] != "1"
+                can_move = True if current_packet[13] != "1" else None
                 direction_facing = int(current_packet[6]) if len(current_packet) > 13 else None
                 quest_dialog_id = npc_req_dict.get(map_npc_id, None)
                 set_dialog = quest_dialog_id if quest_dialog_id != dialog_id else None
