@@ -7,8 +7,9 @@ class NpcParser:
         npcs = []
         shop_packets = [packet for packet in packet_list if len(packet) > 6 and packet[0] == "shop" and packet[1] == "2"]
         shop_item_packets = [packet for packet in packet_list if packet[0] == "shopping" or packet[0] == "n_inv"]
-        npc_req_dict = {int(packet[2]): int(packet[3]) for packet in packet_list if packet[0] == "eff" and len(packet) > 2}
+        effect_req_dict = {int(packet[2]): int(packet[3]) for packet in packet_list if packet[0] == "eff" and len(packet) > 2}
         npc_req_dict = {int(packet[2]): int(packet[3]) for packet in packet_list if packet[0] == "npc_req" and len(packet) > 3}
+        mv_packet_dict = {int(packet[2]): int(packet[3]) for packet in packet_list if packet[0] == "mv" and len(packet) > 4}
         tab_dict = {}
 
         for current_packet in packet_list:
@@ -24,12 +25,13 @@ class NpcParser:
                 can_move = True if current_packet[13] != "1" else None
                 direction_facing = int(current_packet[6]) if len(current_packet) > 13 else None
                 quest_dialog_id = npc_req_dict.get(map_npc_id, None)
-                npc_effect_vnum = npc_req_dict.get(map_npc_id, None)
+                npc_effect_vnum = effect_req_dict.get(map_npc_id, None)
+                npc_can_move = True if mv_packet_dict.get(map_npc_id, None) is not None else None
                 set_dialog = quest_dialog_id if quest_dialog_id != dialog_id else None
 
                 npc = NpcDto(map_id=map_id, map_npc_id=map_npc_id, vnum=vnum, 
                               pos_x=pos_x, pos_y=pos_y, dialog_id=dialog_id, effect_vnum = npc_effect_vnum,
-                              can_move=can_move, quest_dialog_id=set_dialog, direction_facing=direction_facing)
+                              can_move=npc_can_move, quest_dialog_id=set_dialog, direction_facing=direction_facing)
                 npcs.append(npc)
         
         for shop_packet in shop_packets:
