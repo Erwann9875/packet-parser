@@ -12,7 +12,7 @@ class NpcPlugin(Plugin):
 
     async def process(self, cleaned_lines):
         cleaned_lines_filtered = [line for line in cleaned_lines if line]
-        packet_list = [line for line in cleaned_lines_filtered if line[0] in ("in", "mv", "at", "shop", "shopping", "n_inv", "npc_req")]
+        packet_list = [line for line in cleaned_lines_filtered if line[0] in ("in", "mv", "at", "shop", "shopping", "n_inv", "npc_req", "eff")]
 
         npc_parser = NpcParser()
         npc_groups = npc_parser.insert_npcs(packet_list)
@@ -41,6 +41,8 @@ class NpcPlugin(Plugin):
                     "pos_y": npc.pos_y,
                     "dialog_id": npc.dialog_id
                 }
+                if npc.effect_vnum is not None:
+                    npc_info["effect_vnum"] = npc.effect_vnum
                 if npc.can_move is not None:
                     npc_info["can_move"] = npc.can_move
                 if npc.quest_dialog_id is not None:
