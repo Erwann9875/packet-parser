@@ -27,7 +27,8 @@ class TeleporterParser:
                     "map_y": map_y,
                     "type": 1
                 }
-                current_teleporters.append(teleporter)
+                if not any(t['map_npc_id'] == map_npc_id for t in current_teleporters):
+                    current_teleporters.append(teleporter)
 
         if current_map_id != 0 and current_teleporters:
             map_teleporters[current_map_id] = map_teleporters.get(current_map_id, []) + current_teleporters
