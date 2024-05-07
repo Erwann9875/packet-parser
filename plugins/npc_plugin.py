@@ -38,9 +38,10 @@ class NpcPlugin(Plugin):
                     "map_npc_id": npc.map_npc_id,
                     "vnum": npc.vnum,
                     "pos_x": npc.pos_x,
-                    "pos_y": npc.pos_y,
-                    "dialog_id": npc.dialog_id
+                    "pos_y": npc.pos_y
                 }
+                if npc.dialog_id > 0:
+                    npc_info["dialog_id"] = npc.dialog_id
                 if npc.effect_vnum is not None:
                     npc_info["effect_vnum"] = npc.effect_vnum
                 if npc.can_move is not None:
