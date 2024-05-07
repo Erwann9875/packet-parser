@@ -24,13 +24,20 @@ class MonsterParser:
         
     def group_monsters_by_map_id(self, monsters):
         monsters_map = {}
+        seen_monsters = {}
+
         for monster in monsters:
             if monster.map_id not in monsters_map:
                 monsters_map[monster.map_id] = []
-            monsters_map[monster.map_id].append({
-                "map_monster_id": monster.map_monster_id,
-                "vnum": monster.vnum,
-                "map_x": monster.map_x,
-                "map_y": monster.map_y
-            })
+                seen_monsters[monster.map_id] = set()
+                
+            if monster.map_monster_id not in seen_monsters[monster.map_id]:
+                seen_monsters[monster.map_id].add(monster.map_monster_id)
+                monsters_map[monster.map_id].append({
+                    "map_monster_id": monster.map_monster_id,
+                    "vnum": monster.vnum,
+                    "map_x": monster.map_x,
+                    "map_y": monster.map_y
+                })
+
         return monsters_map
