@@ -115,19 +115,25 @@ class NpcParser:
 
     def group_npcs_by_map_id(self, npcs):
         npcs_map = {}
+        seen_npcs = {}
+
         for npc in npcs:
             if npc.map_id not in npcs_map:
                 npcs_map[npc.map_id] = []
-            npcs_map[npc.map_id].append({
-                "map_npc_id": npc.map_npc_id,
-                "vnum": npc.vnum,
-                "pos_x": npc.pos_x,
-                "pos_y": npc.pos_y,
-                "dialog_id": npc.dialog_id,
-                "can_move": npc.can_move,
-                "quest_dialog_id": npc.quest_dialog_id,
-                "effect_vnum": npc.effect_vnum,
-                "direction_facing": npc.direction_facing,
-                "item_shop": npc.item_shop
-            })
+                seen_npcs[npc.map_id] = set()
+
+            if npc.map_npc_id not in seen_npcs[npc.map_id]:
+                seen_npcs[npc.map_id].add(npc.map_npc_id)
+                npcs_map[npc.map_id].append({
+                    "map_npc_id": npc.map_npc_id,
+                    "vnum": npc.vnum,
+                    "pos_x": npc.pos_x,
+                    "pos_y": npc.pos_y,
+                    "dialog_id": npc.dialog_id,
+                    "effect_vnum": npc.effect_vnum,
+                    "can_move": npc.can_move,
+                    "quest_dialog_id": npc.quest_dialog_id,
+                    "direction_facing": npc.direction_facing
+                })
+
         return npcs_map
