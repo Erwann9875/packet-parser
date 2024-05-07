@@ -39,14 +39,13 @@ class PortalParser:
         self.list_portals1.sort(key=lambda p: (p.source_map_id, p.destination_map_id, p.source_map_y, p.source_map_x))
 
         for portal in self.list_portals1:
-            p = next((p for p in self.list_portals1 if p.source_map_id == portal.destination_map_id
-                      and p.destination_map_id == portal.source_map_id), None)
-            if p is None:
-                continue
-
-            portal.destination_map_x, portal.destination_map_y = p.source_map_x, p.source_map_y
-            p.destination_map_x, p.destination_map_y = portal.source_map_x, portal.source_map_y
-            self.list_portals2.extend([p, portal])
+            if not any(portal.equals(other) for other in self.list_portals2):
+                p = next((p for p in self.list_portals1 if p.source_map_id == portal.destination_map_id
+                          and p.destination_map_id == portal.source_map_id), None)
+                if p:
+                    portal.destination_map_x, portal.destination_map_y = p.source_map_x, p.source_map_y
+                    p.destination_map_x, p.destination_map_y = portal.source_map_x, portal.source_map_y
+                self.list_portals2.extend([portal] if p is None else [portal, p])
 
         for portal in self.list_portals2:
             if portal.source_map_id not in portal_groups:

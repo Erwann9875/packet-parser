@@ -33,12 +33,15 @@ class RecipeParser:
                         quantity = int(current_packet[i])
                         items.append({"item_vnum": vnum, "quantity": quantity})
 
-                recipe = next((r for r in recipes if r.item_vnum == item_vnum), None)
+                recipe = next((r for r in recipes if r.item_vnum == item_vnum and r.producer_item_vnum == producer_item_vnum), None)
                 if recipe is None:
                     recipe = RecipeDto(item_vnum=item_vnum, quantity=1, items=items,
                                        producer_map_npc_id=map_npc_id, producer_item_vnum=producer_item_vnum)
                     recipes.append(recipe)
                 else:
-                    recipe.items.extend(items)
+                    existing_items_set = {(item["item_vnum"], item["quantity"]) for item in recipe.items}
+                    new_items = [{"item_vnum": item["item_vnum"], "quantity": item["quantity"]}
+                                 for item in items if (item["item_vnum"], item["quantity"]) not in existing_items_set]
+                    recipe.items.extend(new_items) 
 
         return recipes
