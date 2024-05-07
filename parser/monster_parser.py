@@ -19,8 +19,7 @@ class MonsterParser:
 
                 monster = MonsterDto(map_id, map_monster_id, monster_id, map_x, map_y)
                 monsters.append(monster)
-            
-            monsters.append(monster)
+
         return self.group_monsters_by_map_id(monsters)
         
     def group_monsters_by_map_id(self, monsters):
