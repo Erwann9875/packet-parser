@@ -38,8 +38,7 @@ class MonsterPlugin(Plugin):
                     "map_monster_id": monster.map_monster_id,
                     "vnum": monster.vnum,
                     "map_x": monster.map_x,
-                    "map_y": monster.map_y,
-                    "can_move": monster.can_move
+                    "map_y": monster.map_y
                 })
             yaml_data = yaml.dump({f"map_id": map_id, "monsters": monsters_info}, default_flow_style=False, sort_keys=False)
             with open(os.path.join(output_dir, f"monsters_{map_id}.yaml"), "w") as yaml_file:

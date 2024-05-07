@@ -5,7 +5,6 @@ class MonsterParser:
     def insert_monsters(self, packet_list: List[List[str]]):
         map_id = 0
         monsters = []
-        mob_mv_packets_list = {int(packet[2]) for packet in packet_list if packet[0] == "mv" and packet[1] == "3"}
 
         for current_packet in packet_list:
             if current_packet[0] == "at" and len(current_packet) > 5:
@@ -17,9 +16,8 @@ class MonsterParser:
                 map_x = int(current_packet[4])
                 map_y = int(current_packet[5])
                 direction = int(current_packet[6]) if current_packet[6] else 0
-                is_moving = map_monster_id in mob_mv_packets_list
 
-                monster = MonsterDto(map_id, map_monster_id, monster_id, map_x, map_y, is_moving)
+                monster = MonsterDto(map_id, map_monster_id, monster_id, map_x, map_y)
                 monsters.append(monster)
             
             monsters.append(monster)
@@ -34,7 +32,6 @@ class MonsterParser:
                 "map_monster_id": monster.map_monster_id,
                 "vnum": monster.vnum,
                 "map_x": monster.map_x,
-                "map_y": monster.map_y,
-                "can_move": monster.can_move
+                "map_y": monster.map_y
             })
         return monsters_map
