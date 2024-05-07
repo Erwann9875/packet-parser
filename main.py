@@ -27,6 +27,6 @@ if __name__ == "__main__":
         print(f"Error: File '{input_file}' not found.")
         sys.exit(84)
 
-    with open(input_file, 'r') as file:
+    with open(input_file, 'r', encoding='utf-8') as file:
         lines = file.readlines()
     asyncio.run(processor.process_packet(lines))
