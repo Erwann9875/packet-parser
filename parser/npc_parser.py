@@ -15,7 +15,7 @@ class NpcParser:
         for current_packet in packet_list:
             if current_packet[0] == "at" and len(current_packet) > 5:
                 map_id = int(current_packet[2])
-            
+
             if current_packet[0] == "in" and current_packet[1] == "2" and current_packet[12] == "-1" and int(current_packet[3]) <= 20000:
                 map_npc_id = int(current_packet[3])
                 vnum = int(current_packet[2])
@@ -85,17 +85,11 @@ class NpcParser:
                 for item_data in items_data:
                     if "." not in item_data:
                         item_vnum = int(item_data)
-                        for npc in npcs:
-                            if npc.map_npc_id in tab_dict:
-                                npc.item_shop = None
                         tab["items"].append({"skill_vnum": item_vnum})
                         continue
                     item_info = item_data.split(".")
                     if len(item_info) >= 4:
                         item_vnum = int(item_info[2])
-                        for npc in npcs:
-                            if npc.map_npc_id in tab_dict:
-                                npc.skill_shop = None
                         tab["items"].append({"item_vnum": item_vnum})
                 
                 map_npc_id = int(shop_item_packet[2])
