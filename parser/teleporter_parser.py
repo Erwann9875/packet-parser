@@ -17,7 +17,7 @@ class TeleporterParser:
             if current_packet[0] == "npc_req":
                 map_npc_id = int(current_packet[2])
 
-            if current_packet[0] == "tp" and current_packet[1] == "1":
+            if current_packet[0] == "tp" and current_packet[1] == "1" and current_packet[2] == "2073308":
                 map_x = int(current_packet[3])
                 map_y = int(current_packet[4])
 
