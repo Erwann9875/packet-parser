@@ -29,10 +29,11 @@ class NpcParser:
                 npc_can_move = True if mv_packet_dict.get(map_npc_id, None) is not None else None
                 set_dialog = quest_dialog_id if quest_dialog_id != dialog_id else None
 
-                npc = NpcDto(map_id=map_id, map_npc_id=map_npc_id, vnum=vnum, 
-                              pos_x=pos_x, pos_y=pos_y, dialog_id=dialog_id, effect_vnum = npc_effect_vnum,
-                              can_move=npc_can_move, quest_dialog_id=set_dialog, direction_facing=direction_facing)
-                npcs.append(npc)
+                if vnum < 3130 or vnum > 3133:
+                    npc = NpcDto(map_id=map_id, map_npc_id=map_npc_id, vnum=vnum, 
+                                pos_x=pos_x, pos_y=pos_y, dialog_id=dialog_id, effect_vnum=npc_effect_vnum,
+                                can_move=npc_can_move, quest_dialog_id=set_dialog, direction_facing=direction_facing)
+                    npcs.append(npc)
         
         for shop_packet in shop_packets:
             map_npc_id = int(shop_packet[2])
