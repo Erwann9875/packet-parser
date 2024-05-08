@@ -133,7 +133,8 @@ class NpcParser:
                     "effect_vnum": npc.effect_vnum,
                     "can_move": npc.can_move,
                     "quest_dialog_id": npc.quest_dialog_id,
-                    "direction_facing": npc.direction_facing
+                    "direction_facing": npc.direction_facing,
+                    "item_shop": npc.item_shop
                 })
 
         return npcs_map
