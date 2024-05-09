@@ -35,7 +35,7 @@ class RecipeParser:
                         quantity = int(current_packet[i])
                         items.append({"item_vnum": vnum, "quantity": quantity})
 
-                recipe = next((r for r in recipes if r.item_vnum == item_vnum and r.producer_item_vnum == producer_item_vnum and r.producer_map_npc_id == map_npc_id and producer_item_vnum == producer_item_vnum), None)
+                recipe = next((r for r in recipes if r.item_vnum == item_vnum and r.producer_item_vnum == producer_item_vnum and r.producer_map_npc_id == map_npc_id), None)
                 if recipe is None:
                     recipe = RecipeDto(item_vnum=item_vnum, quantity=1, items=items,
                                        producer_map_npc_id=map_npc_id, producer_item_vnum=producer_item_vnum)
