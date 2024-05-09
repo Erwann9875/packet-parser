@@ -23,6 +23,8 @@ class RecipeParser:
 
             if current_packet[0] == "m_list" and current_packet[1] == "2" and is_item:
                 producer_item_vnum = int(current_packet[2])
+            
+            if is_item:
                 map_npc_id = None
 
             if current_packet[0] == "m_list" and (current_packet[1] == "3" or current_packet[1] == "6"):
@@ -33,7 +35,7 @@ class RecipeParser:
                         quantity = int(current_packet[i])
                         items.append({"item_vnum": vnum, "quantity": quantity})
 
-                recipe = next((r for r in recipes if r.item_vnum == item_vnum and r.producer_item_vnum == producer_item_vnum), None)
+                recipe = next((r for r in recipes if r.item_vnum == item_vnum and r.producer_item_vnum == producer_item_vnum and r.producer_map_npc_id == map_npc_id and producer_item_vnum == producer_item_vnum), None)
                 if recipe is None:
                     recipe = RecipeDto(item_vnum=item_vnum, quantity=1, items=items,
                                        producer_map_npc_id=map_npc_id, producer_item_vnum=producer_item_vnum)
