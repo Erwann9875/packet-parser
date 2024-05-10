@@ -29,6 +29,9 @@ class NpcParser:
                 npc_can_move = True if mv_packet_dict.get(map_npc_id, None) is not None else None
                 set_dialog = quest_dialog_id if quest_dialog_id != dialog_id else None
 
+                if npc_effect_vnum == 855:
+                    npc_effect_vnum = None
+
                 if not (3130 <= vnum <= 3133) and vnum != 2004:
                     npc = NpcDto(map_id=map_id, map_npc_id=map_npc_id, vnum=vnum, 
                                 pos_x=pos_x, pos_y=pos_y, dialog_id=dialog_id, effect_vnum=npc_effect_vnum,
