@@ -11,6 +11,8 @@ class NpcParser:
         npc_req_dict = {int(packet[2]): int(packet[3]) for packet in packet_list if packet[0] == "npc_req" and len(packet) > 3}
         mv_packet_dict = {int(packet[2]): int(packet[3]) for packet in packet_list if packet[0] == "mv" and len(packet) > 4}
         tab_dict = {}
+        shop_tab_id = 0
+        map_npc_id = 0
 
         for current_packet in packet_list:
             if current_packet[0] == "at" and len(current_packet) > 5:
@@ -71,9 +73,6 @@ class NpcParser:
                     break
         
         for shop_item_packet in shop_item_packets:
-            shop_tab_id = 0
-            map_npc_id = 0
-
             if shop_item_packet[0] == "shopping":
                 shop_tab_id = int(shop_item_packet[1])
                 map_npc_id = int(shop_item_packet[4])
