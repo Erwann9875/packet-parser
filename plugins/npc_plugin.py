@@ -5,6 +5,14 @@ import os
 import shutil
 import yaml
 
+class QuotedString(str):
+    pass
+
+def quoted_scalar(dumper, data):
+    return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='"')
+
+yaml.add_representer(QuotedString, quoted_scalar)
+
 class NpcPlugin(Plugin):
     def __init__(self):
         super().__init__()
@@ -51,9 +59,11 @@ class NpcPlugin(Plugin):
                 if npc.direction_facing is not None:
                     npc_info["direction_facing"] = npc.direction_facing
                 if npc.item_shop is not None:
-                    npc_info["item_shop"] = npc.item_shop
+                    npc_info["item_shop"] = {k: QuotedString(v) if isinstance(v, str) else v
+                                            for k, v in npc.item_shop.items()}
                 if npc.skill_shop is not None:
-                    npc_info["skill_shop"] = npc.skill_shop
+                    npc_info["skill_shop"] = {k: QuotedString(v) if isinstance(v, str) else v
+                                            for k, v in npc.skill_shop.items()}
                 npcs_info.append(npc_info)
 
             yaml_data = yaml.dump({"map_id": map_id, "npcs": npcs_info}, default_flow_style=False, sort_keys=False, allow_unicode=True)
