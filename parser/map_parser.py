@@ -118,7 +118,8 @@ class MapParser:
     
     def add_map_flag(self, map_id: int, flag: str):
         if map_id in self.map_flags:
-            self.map_flags[map_id].append(flag)
+            if flag not in self.map_flags[map_id]:
+                self.map_flags[map_id].append(flag)
         else:
             self.map_flags[map_id] = [flag]
 
