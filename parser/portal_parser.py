@@ -27,9 +27,9 @@ class PortalParser:
             if current_packet[0] == "gp" and len(current_packet) > 4:
                 source_x, source_y = int(current_packet[1]), int(current_packet[2])
                 destination_map_id = int(current_packet[3])
-                portal_type = int(current_packet[4])
+                type = int(current_packet[4])
 
-                portal = PortalDto(destination_map_id, 0, 0, map_id, source_x, source_y, portal_type)
+                portal = PortalDto(destination_map_id, 0, 0, map_id, source_x, source_y, type)
 
                 if any(portal.equals(other) for other in self.list_portals1):
                     continue

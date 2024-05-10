@@ -1,13 +1,13 @@
 class PortalDto:
     def __init__(self, destination_map_id: int, destination_map_x: int, destination_map_y: int,
-                 source_map_id: int, source_map_x: int, source_map_y: int, portal_type: int):
+                 source_map_id: int, source_map_x: int, source_map_y: int, type: int):
         self.destination_map_id = destination_map_id
         self.destination_map_x = destination_map_x
         self.destination_map_y = destination_map_y
         self.source_map_id = source_map_id
         self.source_map_x = source_map_x
         self.source_map_y = source_map_y
-        self.portal_type = portal_type
+        self.type = type
 
     def to_dict(self):
         return {
@@ -17,7 +17,7 @@ class PortalDto:
             'source_map_id': self.source_map_id,
             'source_map_x': self.source_map_x,
             'source_map_y': self.source_map_y,
-            'portal_type': self.portal_type
+            'type': self.type
         }
 
     def equals(self, other):
@@ -31,5 +31,5 @@ class PortalDto:
         return (f"PortalDto(source_map_id={self.source_map_id}, "
                 f"source_x={self.source_map_x}, source_y={self.source_map_y}, "
                 f"destination_map_id={self.destination_map_id}, "
-                f"portal_type={self.portal_type}, destination_x={self.destination_map_x}, "
+                f"type={self.type}, destination_x={self.destination_map_x}, "
                 f"destination_y={self.destination_map_y}")
