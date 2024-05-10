@@ -41,7 +41,7 @@ class MonsterPlugin(Plugin):
                     "map_y": monster.map_y
                 })
             yaml_data = yaml.dump({f"map_id": map_id, "monsters": monsters_info}, default_flow_style=False, sort_keys=False)
-            with open(os.path.join(output_dir, f"monsters_{map_id}.yaml"), "w") as yaml_file:
+            with open(os.path.join(output_dir, f"map_{map_id}_monsters.yaml"), "w") as yaml_file:
                 yaml_file.write(yaml_data)
 
     def monsters_by_map_id(self):
