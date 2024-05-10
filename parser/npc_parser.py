@@ -57,7 +57,6 @@ class NpcParser:
                         npc.item_shop["name"] = shop_name
                         npc.item_shop["menu_type"] = menu_type
                         npc.item_shop["shop_type"] = shop_type
-                    break
                     if npc.skill_shop is None:
                         npc.skill_shop = {
                             "name": shop_name,
@@ -85,16 +84,20 @@ class NpcParser:
                     "items": []
                 }
 
+                is_skill = False
+
                 items_data = shop_item_packet[5:]
                 for item_data in items_data:
                     if "." not in item_data:
                         item_vnum = int(item_data)
                         tab["items"].append({"skill_vnum": item_vnum})
+                        is_skill = True
                         continue
                     item_info = item_data.split(".")
                     if len(item_info) >= 4:
                         item_vnum = int(item_info[2])
                         tab["items"].append({"item_vnum": item_vnum})
+                        is_skill = False
                 
                 map_npc_id = int(shop_item_packet[2])
             
@@ -104,10 +107,16 @@ class NpcParser:
 
             for npc in npcs:
                 if npc.map_npc_id in tab_dict:
-                    if npc.item_shop is not None:
+                    if npc.item_shop is not None and is_skill is False:
                         npc.item_shop["tabs"] = tab_dict[npc.map_npc_id]
-                    if npc.skill_shop is not None:
+                        npc.skill_shop = None
+                    if npc.skill_shop is not None and is_skill is True:
                         npc.skill_shop["tabs"] = tab_dict[npc.map_npc_id]
+                        npc.item_shop = None
+                
+                if npc.item_shop is not None and npc.skill_shop is not None:
+                    if not npc.item_shop["tabs"] and not npc.skill_shop["tabs"]:
+                        npc.skill_shop = None
 
         return self.group_npcs_by_map_id(npcs)
 
@@ -132,7 +141,8 @@ class NpcParser:
                     "can_move": npc.can_move,
                     "quest_dialog_id": npc.quest_dialog_id,
                     "direction_facing": npc.direction_facing,
-                    "item_shop": npc.item_shop
+                    "item_shop": npc.item_shop,
+                    "skill_shop": npc.skill_shop
                 })
 
         return npcs_map
