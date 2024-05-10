@@ -58,10 +58,10 @@ class NpcPlugin(Plugin):
                     npc_info["quest_dialog_id"] = npc.quest_dialog_id
                 if npc.direction_facing is not None:
                     npc_info["direction_facing"] = npc.direction_facing
-                if npc.item_shop is not None:
+                if npc.item_shop is not None and (npc.skill_shop is None or not npc.skill_shop["tabs"]):
                     npc_info["item_shop"] = {k: QuotedString(v) if isinstance(v, str) else v
                                             for k, v in npc.item_shop.items()}
-                if npc.skill_shop is not None:
+                if npc.skill_shop is not None and npc.item_shop is None:
                     npc_info["skill_shop"] = {k: QuotedString(v) if isinstance(v, str) else v
                                             for k, v in npc.skill_shop.items()}
                 npcs_info.append(npc_info)

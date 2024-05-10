@@ -113,10 +113,6 @@ class NpcParser:
                     if npc.skill_shop is not None and is_skill is True:
                         npc.skill_shop["tabs"] = tab_dict[npc.map_npc_id]
                         npc.item_shop = None
-                
-                if npc.item_shop is not None and npc.skill_shop is not None:
-                    if not npc.item_shop["tabs"] and not npc.skill_shop["tabs"]:
-                        npc.skill_shop = None
 
         return self.group_npcs_by_map_id(npcs)
 
