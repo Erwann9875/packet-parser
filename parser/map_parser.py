@@ -93,8 +93,8 @@ class MapParser:
         fc_maps = []
         for file in Path(folder_map).iterdir():
             map_id = int(file.name)
-            music_id = dictionary_music.get(file.name)
-            if music_id is not None and music_id != "0" and map_id not in (150, 2750, 2751, 2758):
+            music_id = dictionary_music.get(file.name, None)
+            if music_id is not None and map_id not in (150, 2750, 2751, 2758):
                 self.add_map_flag(map_id, "IS_BASE_MAP")
             flags = self.get_flags(map_id)
             map_dto = MapDto(
