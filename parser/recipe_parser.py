@@ -32,7 +32,7 @@ class RecipeParser:
                 for i in range(2, len(current_packet), 2):
                     if int(current_packet[i + 1]) != -1:
                         vnum = int(current_packet[i + 1])
-                        quantity = int(current_packet[i])
+                        quantity = int(current_packet[i + 2])
                         items.append({"item_vnum": vnum, "quantity": quantity})
 
                 recipe = next((r for r in recipes if r.item_vnum == item_vnum and r.producer_item_vnum == producer_item_vnum and r.producer_map_npc_id == map_npc_id), None)
