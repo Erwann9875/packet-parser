@@ -7,12 +7,6 @@ class PortalParser:
         self.base_path = base_path
         self.binary_map_folder = binary_map_folder
         self.list_portals = []
-        self.special_portals = [
-            PortalDto(98, 6, 36, 150, 172, 171, -1),
-            PortalDto(1, 48, 132, 20001, 3, 8, -1),
-            PortalDto(145, 61, 165, 2586, 34, 54, -1),
-            PortalDto(189, 48, 156, 2587, 42, 3, -1)
-        ]
 
     def _map_files_exist(self, source_map_id: int, destination_map_id: int) -> bool:
         source_map_path = os.path.join(self.base_path, self.binary_map_folder, str(source_map_id))
@@ -23,12 +17,6 @@ class PortalParser:
         map_id = 0
         portal_groups = {}
         unique_portals = set()
-
-        for special_portal in self.special_portals:
-            self.list_portals.append(special_portal)
-            unique_portals.add((special_portal.source_map_id, special_portal.source_map_x,
-                                special_portal.source_map_y, special_portal.destination_map_id,
-                                special_portal.type))
         
         for packet in packet_list:
             if packet[0] == "c_map" and len(packet) > 2:
