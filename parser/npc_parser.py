@@ -89,20 +89,23 @@ class NpcParser:
                 for item_data in items_data:
                     if "." not in item_data:
                         item_vnum = int(item_data)
-                        tab["items"].append({"skill_vnum": item_vnum})
-                        is_skill = True
+                        if not any(item.get('skill_vnum') == item_vnum for item in tab["items"]):
+                            tab["items"].append({"skill_vnum": item_vnum})
+                            is_skill = True
                         continue
                     item_info = item_data.split(".")
                     if len(item_info) >= 4:
                         item_vnum = int(item_info[2])
-                        tab["items"].append({"item_vnum": item_vnum})
-                        is_skill = False
+                        if not any(item.get('item_vnum') == item_vnum for item in tab["items"]):
+                            tab["items"].append({"item_vnum": item_vnum})
+                            is_skill = False
                 
                 map_npc_id = int(shop_item_packet[2])
             
                 if map_npc_id not in tab_dict:
                     tab_dict[map_npc_id] = []
-                tab_dict[map_npc_id].append(tab)
+                if not any(tab['shop_tab_id'] == shop_tab_id for tab in tab_dict[map_npc_id]):
+                    tab_dict[map_npc_id].append(tab)
 
             for npc in npcs:
                 if npc.map_npc_id in tab_dict:
