@@ -1,56 +1,68 @@
-from typing import List
+import os
+from typing import List, Dict
 from dto.portal_dto import PortalDto
 
 class PortalParser:
-    def __init__(self):
-        self.list_portals2 = []
-        self.list_portals1 = []
+    def __init__(self, base_path: str, binary_map_folder: str):
+        self.base_path = base_path
+        self.binary_map_folder = binary_map_folder
+        self.list_portals = []
+        self.special_portals = [
+            PortalDto(98, 6, 36, 150, 172, 171, -1),
+            PortalDto(1, 48, 132, 20001, 3, 8, -1),
+            PortalDto(145, 61, 165, 2586, 34, 54, -1),
+            PortalDto(189, 48, 156, 2587, 42, 3, -1)
+        ]
+
+    def _map_files_exist(self, source_map_id: int, destination_map_id: int) -> bool:
+        source_map_path = os.path.join(self.base_path, self.binary_map_folder, str(source_map_id))
+        destination_map_path = os.path.join(self.base_path, self.binary_map_folder, str(destination_map_id))
+        return os.path.exists(source_map_path) and os.path.exists(destination_map_path)
     
     def insert_portals(self, packet_list: List[List[str]]):
         map_id = 0
         portal_groups = {}
+        unique_portals = set()
 
-        lod_portal = PortalDto(98, 6, 36, 150, 172, 171, -1)
-        miniland_portal = PortalDto(1, 48, 132, 20001, 3, 8, -1)
-        wedding_portal = PortalDto(145, 61, 165, 2586, 34, 54, -1)
-        glacerus_cavern_portal = PortalDto(189, 48, 156, 2587, 42, 3, -1)
-
-        for special_portal in [lod_portal, miniland_portal, wedding_portal, glacerus_cavern_portal]:
-            if not any(portal.source_map_id == special_portal.source_map_id for portal in self.list_portals2):
-                self.list_portals2.append(special_portal)
+        for special_portal in self.special_portals:
+            self.list_portals.append(special_portal)
+            unique_portals.add((special_portal.source_map_id, special_portal.source_map_x,
+                                special_portal.source_map_y, special_portal.destination_map_id,
+                                special_portal.type))
         
-        for current_packet in packet_list:
-            if current_packet[0] == "at" and len(current_packet) > 2:
-                map_id = int(current_packet[2])
+        for packet in packet_list:
+            if packet[0] == "c_map" and len(packet) > 2:
+                map_id = int(packet[2])
                 continue
 
-            if current_packet[0] == "gp" and len(current_packet) > 4:
-                source_x, source_y = int(current_packet[1]), int(current_packet[2])
-                destination_map_id = int(current_packet[3])
-                type = int(current_packet[4])
-
-                if type == 12 or type == 3:
+            if packet[0] == "gp" and len(packet) > 4:
+                if not self._map_files_exist(map_id, int(packet[3])):
                     continue
 
-                portal = PortalDto(destination_map_id, 0, 0, map_id, source_x, source_y, type)
+                portal_tuple = (
+                    int(packet[3]),  # destination_map_id
+                    0,               # source_map_x
+                    0,               # source_map_y
+                    map_id,          # source_map_id
+                    int(packet[1]),  # destination_map_x
+                    int(packet[2]),  # destination_map_y
+                    int(packet[4])   # type
+                )
 
-                if any(portal.equals(other) for other in self.list_portals1):
+                if int(packet[4]) in {12, 3}:
                     continue
 
-                self.list_portals1.append(portal)
+                if portal_tuple not in unique_portals:
+                    self.list_portals.append(PortalDto(*portal_tuple))
+                    unique_portals.add(portal_tuple)
 
-        self.list_portals1.sort(key=lambda p: (p.source_map_id, p.destination_map_id, p.source_map_y, p.source_map_x))
+        for portal in self.list_portals:
+            reverse_portal = next((p for p in self.list_portals if p.source_map_id == portal.destination_map_id
+                                   and p.destination_map_id == portal.source_map_id), None)
+            if reverse_portal:
+                portal.destination_map_x, portal.destination_map_y = reverse_portal.source_map_x, reverse_portal.source_map_y
 
-        for portal in self.list_portals1:
-            if not any(portal.equals(other) for other in self.list_portals2):
-                p = next((p for p in self.list_portals1 if p.source_map_id == portal.destination_map_id
-                          and p.destination_map_id == portal.source_map_id), None)
-                if p:
-                    portal.destination_map_x, portal.destination_map_y = p.source_map_x, p.source_map_y
-                    p.destination_map_x, p.destination_map_y = portal.source_map_x, portal.source_map_y
-                self.list_portals2.extend([portal] if p is None else [portal, p])
-
-        for portal in self.list_portals2:
+        for portal in self.list_portals:
             if portal.source_map_id not in portal_groups:
                 portal_groups[portal.source_map_id] = []
             portal_groups[portal.source_map_id].append(portal)

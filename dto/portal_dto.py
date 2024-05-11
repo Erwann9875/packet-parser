@@ -21,11 +21,13 @@ class PortalDto:
         }
 
     def equals(self, other):
-        return (isinstance(other, PortalDto) and
+        return (self.destination_map_id == other.destination_map_id and
+                self.destination_map_x == other.destination_map_x and
+                self.destination_map_y == other.destination_map_y and
                 self.source_map_id == other.source_map_id and
                 self.source_map_x == other.source_map_x and
                 self.source_map_y == other.source_map_y and
-                self.destination_map_id == other.destination_map_id)
+                self.type == other.type)
 
     def __repr__(self):
         return (f"PortalDto(source_map_id={self.source_map_id}, "
