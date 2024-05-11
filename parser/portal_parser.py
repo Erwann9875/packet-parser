@@ -29,6 +29,9 @@ class PortalParser:
                 destination_map_id = int(current_packet[3])
                 type = int(current_packet[4])
 
+                if type == 12 or type == 3:
+                    continue
+
                 portal = PortalDto(destination_map_id, 0, 0, map_id, source_x, source_y, type)
 
                 if any(portal.equals(other) for other in self.list_portals1):
