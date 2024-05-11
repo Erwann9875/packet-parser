@@ -25,15 +25,18 @@ class MonsterParser:
     def group_monsters_by_map_id(self, monsters):
         monsters_map = {}
         seen_positions = {}
+        seen_mobs = {}
 
         for monster in monsters:
             if monster.map_id not in monsters_map:
                 monsters_map[monster.map_id] = []
                 seen_positions[monster.map_id] = set()
+                seen_mobs[monster.map_id] = set()
                 
             position = (monster.map_x, monster.map_y)
-            if position not in seen_positions[monster.map_id]:
+            if position not in seen_positions[monster.map_id] and monster.map_monster_id not in seen_mobs[monster.map_id]:
                 seen_positions[monster.map_id].add(position)
+                seen_mobs[monster.map_id].add(monster.map_monster_id)
                 monsters_map[monster.map_id].append({
                     "map_monster_id": monster.map_monster_id,
                     "vnum": monster.vnum,
