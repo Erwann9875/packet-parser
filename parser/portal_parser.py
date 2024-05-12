@@ -7,11 +7,6 @@ class PortalParser:
         self.base_path = base_path
         self.binary_map_folder = binary_map_folder
         self.list_portals = []
-
-    def _map_files_exist(self, source_map_id: int, destination_map_id: int) -> bool:
-        source_map_path = os.path.join(self.base_path, self.binary_map_folder, str(source_map_id))
-        destination_map_path = os.path.join(self.base_path, self.binary_map_folder, str(destination_map_id))
-        return os.path.exists(source_map_path) and os.path.exists(destination_map_path)
     
     def insert_portals(self, packet_list: List[List[str]]):
         map_id = 0
@@ -24,9 +19,6 @@ class PortalParser:
                 continue
 
             if packet[0] == "gp" and len(packet) > 4:
-                if not self._map_files_exist(map_id, int(packet[3])):
-                    continue
-
                 portal_tuple = (
                     int(packet[3]),  # destination_map_id
                     0,               # source_map_x
