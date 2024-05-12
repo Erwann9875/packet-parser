@@ -27,7 +27,7 @@ class RecipeParser:
             if is_item:
                 map_npc_id = None
 
-            if current_packet[0] == "m_list" and (current_packet[1] == "3" or current_packet[1] == "6"):
+            if current_packet[0] == "m_list" and (current_packet[1] == "3" or current_packet[1] == "5"):
                 items = []
                 for i in range(2, len(current_packet), 2):
                     if int(current_packet[i + 1]) != -1:
