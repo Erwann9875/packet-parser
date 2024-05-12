@@ -7,7 +7,7 @@ class MonsterParser:
         monsters = []
 
         for current_packet in packet_list:
-            if current_packet[0] == "at" and len(current_packet) > 5:
+            if current_packet[0] == "c_map":
                 map_id = int(current_packet[2])
             
             if len(current_packet) > 7 and current_packet[0] == "in" and current_packet[1] == "3" and int(current_packet[3]) <= 20000:
