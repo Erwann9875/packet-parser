@@ -29,7 +29,7 @@ class PortalParser:
                     int(packet[4])   # type
                 )
 
-                if int(packet[4]) in {12, 3}:
+                if int(packet[4]) in {12, 3} or map_id in (145, 2108, 2109, 2111, 2112):
                     continue
 
                 if portal_tuple not in unique_portals:
