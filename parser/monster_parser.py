@@ -17,6 +17,9 @@ class MonsterParser:
                 map_y = int(current_packet[5])
                 direction = int(current_packet[6]) if current_packet[6] else 0
 
+                if monster_id == 194:
+                    continue
+                
                 monster = MonsterDto(map_id, map_monster_id, monster_id, map_x, map_y)
                 monsters.append(monster)
 
