@@ -50,6 +50,9 @@ class PortalParser:
                     unique_portals.add(portal_tuple)
 
         for portal in self.list_portals:
+            if portal.source_map_id == 1 and portal.source_map_x == 117 and portal.source_map_y == 177:
+                portal.destination_map_x = 59
+                portal.destination_map_y = 2
             reverse_portal = next((p for p in self.list_portals if p.source_map_id == portal.destination_map_id
                                    and p.destination_map_id == portal.source_map_id), None)
             if reverse_portal:
