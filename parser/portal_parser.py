@@ -8,7 +8,11 @@ class PortalParser:
         self.binary_map_folder = binary_map_folder
         self.list_portals = []
         self.special_portals = [
-            PortalDto(98, 6, 36, 150, 172, 171, -1),
+            PortalDto(2107, 11, 5, 4, 213, 111, -1), #Pyjama Map
+            PortalDto(2108, 11, 5, 5, 16, 56, -1), #SP1 Map
+            PortalDto(2109, 11, 5, 11, 8, 107, -1), #SP2 Map
+            PortalDto(2111, 11, 5, 22, 5, 30, -1), #SP3 Map
+            PortalDto(2112, 11, 5, 46, 11, 43, -1), #SP4 Map
         ]
     
     def insert_portals(self, packet_list: List[List[str]]):
