@@ -11,6 +11,7 @@ class RecipeParser:
 
         for current_packet in packet_list:
             if len(current_packet) > 1 and current_packet[0] == "##" and current_packet[1] == "scroll":
+                print("test")
                 is_item = True
 
             if len(current_packet) > 2 and current_packet[0] == "pdtse":
