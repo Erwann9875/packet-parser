@@ -28,9 +28,12 @@ class RecipeParser:
             if is_item:
                 map_npc_id = None
 
-            if current_packet[0] == "m_list" and (current_packet[1] == "3" or current_packet[1] == "5"):
+            if current_packet[0] == "m_list" and (current_packet[1] == "3" or current_packet[1] == "5" or current_packet[1] == "6"):
                 items = []
-                for i in range(2, len(current_packet), 2):
+                to_add = 0
+                if current_packet[1] == "6":
+                    to_add = 1
+                for i in range(2 + to_add, len(current_packet), 2):
                     if int(current_packet[i + 1]) != -1:
                         vnum = int(current_packet[i + 1])
                         quantity = int(current_packet[i + 2])
