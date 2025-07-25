@@ -11,7 +11,6 @@ class RecipeParser:
 
         for current_packet in packet_list:
             if len(current_packet) > 1 and current_packet[0] == "##" and current_packet[1] == "scroll":
-                print("test")
                 is_item = True
 
             if len(current_packet) > 2 and current_packet[0] == "pdtse":
@@ -34,7 +33,7 @@ class RecipeParser:
                 if current_packet[1] == "6":
                     to_add = 1
                 for i in range(2 + to_add, len(current_packet), 2):
-                    if int(current_packet[i + 1]) != -1:
+                    if int(current_packet[i + 1]) != -1 and int(current_packet[i + 1]) != 0:
                         vnum = int(current_packet[i + 1])
                         quantity = int(current_packet[i + 2])
                         items.append({"item_vnum": vnum, "quantity": quantity})
