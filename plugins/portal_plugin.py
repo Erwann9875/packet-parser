@@ -7,7 +7,7 @@ import yaml
 class PortalPlugin(Plugin):
     async def process(self, cleaned_lines):
         cleaned_lines_filtered = [line for line in cleaned_lines if line]
-        packet_list = [line for line in cleaned_lines_filtered if line[0] in ("c_map", "gp")]
+        packet_list = [line for line in cleaned_lines_filtered if line[0] in ("at", "c_map", "gp")]
 
         portal_parser = PortalParser("./input", "map")
         portal_groups = portal_parser.insert_portals(packet_list)
