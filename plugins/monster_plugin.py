@@ -3,6 +3,7 @@ from parser.monster_parser import MonsterParser
 from dto.monster_dto import MonsterDto
 import os
 import shutil
+import time
 import yaml
 
 class MonsterPlugin(Plugin):
@@ -18,9 +19,7 @@ class MonsterPlugin(Plugin):
         monster_groups = monster_parser.insert_monsters(packet_list)
 
         output_monsters_dir = "./output/map_monster_placement"
-        if os.path.exists(output_monsters_dir):
-            shutil.rmtree(output_monsters_dir)
-        os.makedirs(output_monsters_dir)
+        self.prepare_output_dir(output_monsters_dir)
 
         for map_id, monsters_info in monster_groups.items():
             for monster_info in monsters_info:
@@ -43,6 +42,25 @@ class MonsterPlugin(Plugin):
             yaml_data = yaml.dump({f"map_id": map_id, "monsters": monsters_info}, default_flow_style=False, sort_keys=False)
             with open(os.path.join(output_dir, f"map_{map_id}_monsters.yaml"), "w") as yaml_file:
                 yaml_file.write(yaml_data)
+
+    def prepare_output_dir(self, output_dir: str):
+        os.makedirs(output_dir, exist_ok=True)
+
+        for entry in os.scandir(output_dir):
+            target = entry.path
+            if entry.is_dir():
+                shutil.rmtree(target, ignore_errors=True)
+                continue
+
+            for attempt in range(3):
+                try:
+                    os.chmod(target, 0o666)
+                    os.remove(target)
+                    break
+                except PermissionError:
+                    if attempt == 2:
+                        raise
+                    time.sleep(0.2)
 
     def monsters_by_map_id(self):
         monsters_map = {}

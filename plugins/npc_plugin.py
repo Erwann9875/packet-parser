@@ -67,7 +67,7 @@ class NpcPlugin(Plugin):
                 npcs_info.append(npc_info)
 
             yaml_data = yaml.dump({"map_id": map_id, "npcs": npcs_info}, default_flow_style=False, sort_keys=False, allow_unicode=True)
-            with open(os.path.join(output_dir, f"map_{map_id}_npc.yaml"), "w") as yaml_file:
+            with open(os.path.join(output_dir, f"map_{map_id}_npc.yaml"), "w", encoding="utf-8") as yaml_file:
                 yaml_file.write(yaml_data)
 
     def npcs_by_map_id(self):
